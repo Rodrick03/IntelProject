@@ -1,7 +1,7 @@
 import torch
 from transformers import pipeline, AutoModelForSequenceClassification, AutoTokenizer
 import tkinter as tk
-from tkinter import scrolledtext
+from tkinter import scrolledtext, Toplevel, Text
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
@@ -130,7 +130,7 @@ def save_pdf():
     ax.plot(range(1, question_count + 1), scores, marker='o', color='blue', linestyle='-', linewidth=2, markersize=5)
     ax.set_xlabel('Question Number')
     ax.set_ylabel('Score')
-    ax.set_title('Interview Performance')
+    ax.setTitle('Interview Performance')
 
     # Guardar la gráfica temporalmente
     graph_file = "performance_plot.png"
@@ -140,7 +140,7 @@ def save_pdf():
     # Agregar la gráfica al PDF
     from reportlab.platypus import Image
     elements.append(Image(graph_file, width=6 * inch, height=3 * inch))
-
+    
     # Construir el documento
     doc.build(elements)
 
@@ -148,6 +148,32 @@ def save_pdf():
     os.remove(graph_file)
 
     result_label.config(text="PDF Saved!")
+
+def show_help():
+    help_window = Toplevel(root)
+    help_window.title("User Manual")
+    help_window.geometry("400x300")
+
+    help_text = Text(help_window, wrap="word")
+    help_text.insert(tk.END, """
+    Welcome to AiInterview: Interview Simulator!
+
+    How to Use:
+
+    1. Enter the job description in the 'Job Description' box.
+    2. Click on 'Generate Questions' to create interview questions based on the job description.
+    3. Answer the questions in the 'Your Response' box and click 'Submit Response'.
+    4. After answering all questions, you can save the results as a PDF by clicking 'Save PDF'.
+    5. Use the 'Help' button anytime to view this manual.
+
+    Tips:
+    - Make sure your job description is detailed for better question generation.
+    - Provide thoughtful responses to get accurate evaluations.
+
+    Enjoy your practice interview!
+    """)
+    help_text.config(state=tk.DISABLED)
+    help_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
 # Variables globales
 questions = []
@@ -181,6 +207,9 @@ submit_button.pack(fill=tk.X, padx=10, pady=5)
 
 save_pdf_button = tk.Button(root, text="Save PDF", command=save_pdf, state=tk.DISABLED)
 save_pdf_button.pack(fill=tk.X, padx=10, pady=5)
+
+help_button = tk.Button(root, text="Help", command=show_help)
+help_button.pack(fill=tk.X, padx=10, pady=5)
 
 result_label = tk.Label(root, text="Response Score: ")
 result_label.pack(fill=tk.X, padx=10, pady=5)
