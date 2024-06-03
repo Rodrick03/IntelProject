@@ -1,0 +1,2 @@
+# IntelProject
+Intel Project AI
