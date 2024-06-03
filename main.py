@@ -125,12 +125,13 @@ def save_pdf():
     elements.append(table)
     elements.append(Spacer(1, 24))
 
-    # Crear y guardar la gráfica
+    # Crear y guardar la gráfica de barras
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(range(1, question_count + 1), scores, marker='o', color='blue', linestyle='-', linewidth=2, markersize=5)
+    colors_list = ['red' if score <= 0.59 else 'green' for score in scores]
+    ax.bar(range(1, question_count + 1), scores, color=colors_list)
     ax.set_xlabel('Question Number')
     ax.set_ylabel('Score')
-    ax.setTitle('Interview Performance')
+    ax.set_title('Interview Performance')
 
     # Guardar la gráfica temporalmente
     graph_file = "performance_plot.png"
